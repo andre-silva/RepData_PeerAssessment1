@@ -212,6 +212,7 @@ a factor variable too.</p>
 <pre><code class="r">suppressWarnings(library(lubridate))
 unzip(&quot;activity.zip&quot;)
 dataset &lt;- read.csv(&quot;activity.csv&quot;)
+dataset &lt;- transform(dataset, date = ymd(date))
 </code></pre>
 
 <h2>What is mean total number of steps taken per day?</h2>

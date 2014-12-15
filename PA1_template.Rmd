@@ -20,6 +20,7 @@ This is the code to achieve this:
 suppressWarnings(library(lubridate))
 unzip("activity.zip")
 dataset <- read.csv("activity.csv")
+dataset <- transform(dataset, date = ymd(date))
 ```
 
 ## What is mean total number of steps taken per day?
