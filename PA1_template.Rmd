@@ -12,10 +12,12 @@ opts_chunk$set(echo=TRUE)
 
 ## Loading and preprocessing the data
 First we need to unzip and clean the data so we end up with a tidy dataset,
-storing it in a variable called dataset.
+storing it in a variable called dataset. The dates need to be transformed from
+a factor variable too.
 
 This is the code to achieve this:
 ```{r loadData}
+suppressWarnings(library(lubridate))
 unzip("activity.zip")
 dataset <- read.csv("activity.csv")
 ```
@@ -121,6 +123,8 @@ median3 <- median(plotdata3)
 ```
 
 The mean for the total number of steps per day is now `r mean3` and the median
-for the total number of steps per day is now `r median3`.
+for the total number of steps per day is now `r median3`. Imputing missing
+data makes the histogram look more like a normal distribution as it removes the
+frequency of 0 steps per day which occurs for days where there is no data.
 
 ## Are there differences in activity patterns between weekdays and weekends?

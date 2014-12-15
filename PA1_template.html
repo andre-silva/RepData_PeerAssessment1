@@ -204,11 +204,13 @@ hr {
 <h2>Loading and preprocessing the data</h2>
 
 <p>First we need to unzip and clean the data so we end up with a tidy dataset,
-storing it in a variable called dataset.</p>
+storing it in a variable called dataset. The dates need to be transformed from
+a factor variable too.</p>
 
 <p>This is the code to achieve this:</p>
 
-<pre><code class="r">unzip(&quot;activity.zip&quot;)
+<pre><code class="r">suppressWarnings(library(lubridate))
+unzip(&quot;activity.zip&quot;)
 dataset &lt;- read.csv(&quot;activity.csv&quot;)
 </code></pre>
 
@@ -293,7 +295,8 @@ this is the code that needs to be run:</p>
 minute interval. This is the code I used to create the new dataset without 
 missing values:</p>
 
-<pre><code class="r">impute.mean &lt;- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
+<pre><code class="r">library(plyr)
+impute.mean &lt;- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 fullDataset &lt;- ddply(dataset, ~interval, transform, steps=impute.mean(steps))
 fullDataset &lt;- fullDataset[order(fullDataset$date, fullDataset$interval),]
 </code></pre>
@@ -315,7 +318,9 @@ median3 &lt;- median(plotdata3)
 </code></pre>
 
 <p>The mean for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup> and the median
-for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup>.</p>
+for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup>. Imputing missing
+data makes the histogram look more like a normal distribution as it removes the
+frequency of 0 steps per day which occurs for days where there is no data.</p>
 
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 

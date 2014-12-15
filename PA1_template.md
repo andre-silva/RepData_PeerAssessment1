@@ -9,11 +9,13 @@ output:
 
 ## Loading and preprocessing the data
 First we need to unzip and clean the data so we end up with a tidy dataset,
-storing it in a variable called dataset.
+storing it in a variable called dataset. The dates need to be transformed from
+a factor variable too.
 
 This is the code to achieve this:
 
 ```r
+suppressWarnings(library(lubridate))
 unzip("activity.zip")
 dataset <- read.csv("activity.csv")
 ```
@@ -108,6 +110,7 @@ missing values:
 
 
 ```r
+library(plyr)
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 fullDataset <- ddply(dataset, ~interval, transform, steps=impute.mean(steps))
 fullDataset <- fullDataset[order(fullDataset$date, fullDataset$interval),]
@@ -133,6 +136,8 @@ median3 <- median(plotdata3)
 ```
 
 The mean for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup> and the median
-for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup>.
+for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup>. Imputing missing
+data makes the histogram look more like a normal distribution as it removes the
+frequency of 0 steps per day which occurs for days where there is no data.
 
 ## Are there differences in activity patterns between weekdays and weekends?
