@@ -101,6 +101,7 @@ minute interval. This is the code I used to create the new dataset without
 missing values:
 
 ```{r imputeMissingData}
+library(plyr)
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 fullDataset <- ddply(dataset, ~interval, transform, steps=impute.mean(steps))
 fullDataset <- fullDataset[order(fullDataset$date, fullDataset$interval),]
