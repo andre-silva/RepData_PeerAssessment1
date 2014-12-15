@@ -142,3 +142,45 @@ data makes the histogram look more like a normal distribution as it removes the
 frequency of 0 steps per day which occurs for days where there is no data.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+The first step is to create the factor variable and add it to the data set
+without missing values. This is the code used:
+
+
+```r
+fullDataset <- transform(fullDataset, dayType = weekdays(fullDataset$date))
+fullDataset$dayType <- sub("Saturday|Sunday","weekend",weekdays)
+fullDataset$dayType <- sub("Monday|Tuesday|Wednesday|Thursday|Friday",
+                           "weekday",weekdays)
+fullDataset$dayType <- factor(fullDataset$dayType)
+```
+
+Now in order to create the plot required we need to calculate the average number
+of steps taken of the 5-minute interval and day type and proceed to create the
+plot. I used the lattice system and this is the code to get that plot (again, I
+had to change the interval from an integer into a sequence so it is linear and
+then manually set the correct labels):
+
+
+```r
+library(lattice)
+plotdata4 <- aggregate(steps ~ interval + dayType,
+                       data = fullDataset,
+                       FUN="mean")
+correctInterval <- c(1:288,1:288)
+plotdata4 <- transform(plotdata4,interval = correctInterval)
+xyplot(steps ~ interval | dayType,
+       data=plotdata4,
+       type = "l",
+       layout = c(1,2),
+       main="Average number of steps taken per 5 minute interval and day type",
+       xlab="Interval",
+       ylab="Number of steps",
+       scales=list(
+           x=list(
+               at=c(1,37,73,109,145,181,217,253,288),
+               labels=c("00:00","03:00","06:00","09:00",
+                        "12:00","15:00","18:00","21:00","23:55"))))
+```
+
+![plot of chunk plot4_2](figure/plot4_2-1.png) 
