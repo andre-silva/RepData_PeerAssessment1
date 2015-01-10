@@ -26,7 +26,7 @@ dataset <- transform(dataset, date = ymd(date))
 ## What is mean total number of steps taken per day?
 For this portion we're told we can ignore missing values in the dataset. As I
 see it there are 2 ways of achieving this: use **complete.cases** and completely
-remove missing values or use **na.rm = TRUE** when summarizing the data
+remove missing values or use **na.rm = TRUE** when summarizing the data.
 
 I chose to use the latter option although it distorts summaries (eg. setting
 quite a few days with missing data to 0 when doing the sum of the number of
@@ -104,7 +104,7 @@ minute interval. This is the code I used to create the new dataset without
 missing values:
 
 ```{r imputeMissingData}
-library(plyr)
+suppressWarnings(library(plyr))
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 fullDataset <- ddply(dataset, ~interval, transform, steps=impute.mean(steps))
 fullDataset <- fullDataset[order(fullDataset$date, fullDataset$interval),]
@@ -119,8 +119,8 @@ plotdata3 <- tapply(fullDataset$steps, fullDataset$date, sum, na.rm = TRUE)
 hist(plotdata3,
      main = "Histogram of the total number of steps taken each day",
      xlab = "Number of steps")
-mean3 <- mean(plotdata3)
-median3 <- median(plotdata3)
+mean3 <- format(mean(plotdata3), scientific=FALSE)
+median3 <- format(median(plotdata3), scientific=FALSE)
 ```
 
 The mean for the total number of steps per day is now `r mean3` and the median

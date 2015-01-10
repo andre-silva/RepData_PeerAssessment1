@@ -24,7 +24,7 @@ dataset <- transform(dataset, date = ymd(date))
 ## What is mean total number of steps taken per day?
 For this portion we're told we can ignore missing values in the dataset. As I
 see it there are 2 ways of achieving this: use **complete.cases** and completely
-remove missing values or use **na.rm = TRUE** when summarizing the data
+remove missing values or use **na.rm = TRUE** when summarizing the data.
 
 I chose to use the latter option although it distorts summaries (eg. setting
 quite a few days with missing data to 0 when doing the sum of the number of
@@ -111,7 +111,7 @@ missing values:
 
 
 ```r
-library(plyr)
+suppressWarnings(library(plyr))
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 fullDataset <- ddply(dataset, ~interval, transform, steps=impute.mean(steps))
 fullDataset <- fullDataset[order(fullDataset$date, fullDataset$interval),]
@@ -132,12 +132,12 @@ hist(plotdata3,
 ![plot of chunk plot3](figure/plot3-1.png) 
 
 ```r
-mean3 <- mean(plotdata3)
-median3 <- median(plotdata3)
+mean3 <- format(mean(plotdata3), scientific=FALSE)
+median3 <- format(median(plotdata3), scientific=FALSE)
 ```
 
-The mean for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup> and the median
-for the total number of steps per day is now 1.0766189 &times; 10<sup>4</sup>. Imputing missing
+The mean for the total number of steps per day is now 10766.19 and the median
+for the total number of steps per day is now 10766.19. Imputing missing
 data makes the histogram look more like a normal distribution as it removes the
 frequency of 0 steps per day which occurs for days where there is no data.
 
